@@ -23,9 +23,10 @@ def cli():
                         help='Expire progress files after x seconds. Set to 0 to disable.')
     parser.add_argument('-m', '--host', help='MQTT server hostname')
     parser.add_argument('--port', type=int, help='MQTT server port. Defaults to 1883 or 8883 (TLS).')
-    parser.add_argument('-t', '--tls', action='store_true', default=True, help='use MQTT over TLS')
+    parser.add_argument('-s', '--tls', action='store_true', default=True, help='use MQTT over TLS')
     parser.add_argument('-u', '--username', help='MQTT username')
     parser.add_argument('-p', '--password', help='MQTT password')
+    parser.add_argument('-t', '--topic', default='voc/ffmpeg/progress/{job}', help='MQTT topic template')
     parser.add_argument('-i', '--mqtt_interval', type=int, default=5,
                         help='Interval to send progress via MQTT')
     args = parser.parse_args()
@@ -47,7 +48,7 @@ async def main(args):
 
     watcher = Watcher(args.watch_path)
     sender = MQTTSender(watcher, mqtt_host, username=mqtt_username, password=mqtt_password, tls=args.tls,
-                        port=args.port, interval=args.mqtt_interval)
+                        port=args.port, topic=args.topic, interval=args.mqtt_interval)
     cleaner = ProgressFileCleaner(watcher)
 
     async with asyncio.TaskGroup() as tg:

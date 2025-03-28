@@ -32,7 +32,7 @@ Most config options are set via the command line.
 
 ```
 ffmpeg2mqtt --help
-usage: ffmpeg2mqtt [-h] [-w WATCH_PATH] [-d] [-x EXPIRE] [-m HOST] [--port PORT] [-t] [-u USERNAME] [-p PASSWORD] [-i MQTT_INTERVAL]
+usage: ffmpeg2mqtt [-h] [-w WATCH_PATH] [-d] [-x EXPIRE] [-m HOST] [--port PORT] [-s] [-u USERNAME] [-p PASSWORD] [-t TOPIC] [-i MQTT_INTERVAL]
 
 stream ffmpeg progress to mqtt
 
@@ -45,11 +45,13 @@ options:
                         Expire progress files after x seconds. Set to 0 to disable.
   -m HOST, --host HOST  MQTT server hostname
   --port PORT           MQTT server port. Defaults to 1883 or 8883 (TLS).
-  -t, --tls             use MQTT over TLS
+  -s, --tls             use MQTT over TLS
   -u USERNAME, --username USERNAME
                         MQTT username
   -p PASSWORD, --password PASSWORD
                         MQTT password
+  -t TOPIC, --topic TOPIC
+                        MQTT topic template
   -i MQTT_INTERVAL, --mqtt_interval MQTT_INTERVAL
                         Interval to send progress via MQTT
 ```

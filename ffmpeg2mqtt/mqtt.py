@@ -13,12 +13,13 @@ logger = logging.getLogger(__name__)
 
 class MQTTSender:
 
-    def __init__(self, watcher: Watcher, hostname, username=None, password=None, tls=True, port=None, interval=5,
-                 **kwargs):
+    def __init__(self, watcher: Watcher, hostname, username=None, password=None, tls=True, port=None,
+                 topic='voc/ffmpeg/progress/{job}', interval=5, **kwargs):
         self.watcher = watcher
         if port is None:
             port = 8883 if tls else 1883
         tls_context = ssl.create_default_context() if tls else None
+        self.topic = topic
         self.interval = interval
 
         self.client = aiomqtt.Client(hostname, port=port, username=username, password=password, tls_context=tls_context,
@@ -35,8 +36,8 @@ class MQTTSender:
                             age = now - file.last_modified
                             if age > 60 or file.completed and age > 2 * self.interval:
                                 continue
-                            name = name.removesuffix('.txt').replace('/', '_')
-                            await self.client.publish(f'voc/ffmpeg/progess/{name}', json.dumps(file.serialize()))
+                            obj = file.serialize()
+                            await self.client.publish(self.topic.format(**obj), json.dumps(obj))
                         await asyncio.sleep(self.interval)
             except aiomqtt.MqttError:
                 logger.error(f"Connection lost; Reconnecting in {self.interval} seconds ...")
