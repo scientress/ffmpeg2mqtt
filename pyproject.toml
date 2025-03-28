@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ffmpeg2mqtt"
+version = "0.0.1a"
+dependencies = [
+  "aiomqtt",
+  "asyncinotify",
+]
+requires-python = ">=3.11"
+authors = [
+  {name="Scientress", email="python@scientress.de"},
+]
+description = "This tool watches a folder for ffmpeg progress files and sends their serialized content via MQTT."
+readme = "README.md"
+license = {file = 'LICENSE.txt'}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/voc/ffmpeg2mqtt"
+Issues = "https://github.com/voc/ffmpeg2mqtt/issues"
+
+[project.scripts]
+ffmpeg2mqtt = "ffmpeg2mqtt:cli"
